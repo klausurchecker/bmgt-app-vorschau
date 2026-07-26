@@ -3,7 +3,7 @@
   Klausurchecker BMGT - Management 1 (Prof. Friebel)
   Gebaut mit _KURSSYSTEM/build/build_app.py aus dem Live-App-Muster.
   Inhalte 1:1 aus BMGT/lektionen + BMGT/fragenbank (QS-geprueft).
-  BAU-STEMPEL schale=1dfcf26
+  BAU-STEMPEL schale=dd50afe
 -->
 <html lang="de" data-theme="light">
 <head>
@@ -3215,6 +3215,7 @@ window.BKBC = (function(){
   function euro(v){ return v.toFixed(2).replace(".",",")+" €"; }
   function ownedChapters(){ var c=0; for(var i=1;i<=10;i++){ if(i!==3 && ST.owned[i]) c++; } return c; }
   function hasKomplett(){ return ZUGANG==="komplett" || ST.pkg==="komplett"; }
+  window.BK_HAS_KOMPLETT = hasKomplett;   /* fuer den Simulator */
   function hasAllHandouts(){ return !!ST.hoAll; }
   function handoutUnlocked(n){ return hasAllHandouts() || !!ST.hoOwned[n]; }
 
@@ -4377,7 +4378,7 @@ html.bklg-lock,body.bklg-lock{overflow:hidden!important;overscroll-behavior:none
 <script id="bkSimBridge">
 (function(){
   window.BK_SIM_SHARE_URL = "https://bmgt.klausurchecker.de/";
-  window.BK_SIM_ACCESS = function(){ try{ return !!(window.BK_ENT && window.BK_ENT.komplett) || document.body.getAttribute("data-zugang")==="komplett"; }catch(e){ return false; } };
+  window.BK_SIM_ACCESS = function(){ try{ return typeof window.BK_HAS_KOMPLETT === "function" ? !!window.BK_HAS_KOMPLETT() : false; }catch(e){ return false; } };
   window.BK_SIM_BUY = function(){ try{ var b=document.querySelector('[data-tab="pfad"]'); if(b) b.click(); }catch(e){} };
 })();
 </script>
