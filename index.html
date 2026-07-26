@@ -3,7 +3,7 @@
   Klausurchecker BMGT - Management 1 (Prof. Friebel)
   Gebaut mit _KURSSYSTEM/build/build_app.py aus dem Live-App-Muster.
   Inhalte 1:1 aus BMGT/lektionen + BMGT/fragenbank (QS-geprueft).
-  BAU-STEMPEL schale=dd50afe
+  BAU-STEMPEL schale=6dd7193
 -->
 <html lang="de" data-theme="light">
 <head>
@@ -972,9 +972,10 @@ window.BKBC = (function(){
 
   <div class="sec-lbl">Meine Kurse</div>
   <div class="linklist" id="kursSwitch">
-    <a href="#" onclick="return false" aria-current="page" style="cursor:default"><span><b>BMGT</b> · Management 1</span><span class="pill orange">Aktiv</span></a>
-    <a href="https://omik.klausurchecker.de/"><span><b>OMIK</b> · Mikroökonomie</span><span style="display:inline-flex;align-items:center;gap:8px"><span class="pill gratis">Kostenlos</span><svg class="i"><use href="#i-chev"/></svg></span></a>
-    <a href="https://ofin.klausurchecker.de/"><span><b>OFIN</b> · Finanzen 1</span><svg class="i"><use href="#i-chev"/></svg></a>
+    <a href="#" onclick="return false" aria-current="page" style="cursor:default"><span><b>BMGT</b> &middot; Management 1</span><span class="pill orange">Aktiv</span></a>
+    <a href="https://osta.klausurchecker.de/"><span><b>OSTA</b> &middot; Statistik 1</span><svg class="i"><use href="#i-chev"/></svg></a>
+    <a href="https://ofin.klausurchecker.de/"><span><b>OFIN</b> &middot; Finanzen 1</span><svg class="i"><use href="#i-chev"/></svg></a>
+    <a href="https://omik.klausurchecker.de/"><span><b>OMIK</b> &middot; Mikroökonomie</span><span style="display:inline-flex;align-items:center;gap:8px"><span class="pill gratis">Kostenlos</span><svg class="i"><use href="#i-chev"/></svg></span></a>
   </div>
 
   <div class="legal-foot">
@@ -2187,7 +2188,7 @@ window.BKBC = (function(){
       <h2>So fühlt sich das an.</h2>
       <p class="sub">Eine Frage, ein Klick, sofort Klarheit. Genau so arbeitest du hier in jedem Kapitel.</p>
       <div class="ob-q">
-        <div class="stem">Was gilt für das sichere Ereignis, also den gesamten Ergebnisraum &Omega;?</div>
+        <div class="stem" id="obQStem">&hellip;</div>
         <div id="obQOpts"></div>
         <div class="fb" id="obQFb"></div>
       </div>
@@ -2196,7 +2197,7 @@ window.BKBC = (function(){
 
     <div class="ob-pane" data-pane="3">
       <h2>Kapitel 2 ist frei.</h2>
-      <p class="sub">Wahrscheinlichkeitsrechnung ist deine Gratis&#8209;Lektion: Einstieg, Rechenweg, Beispiel und der Selbsttest mit 16 Fragen. Danach entscheidest du selbst.</p>
+      <p class="sub">Oligopol: Cournot, Bertrand &amp; Stackelberg ist deine Gratis&#8209;Lektion: Einstieg, Rechenweg, Beispiel und der Selbsttest mit 16 Fragen. Danach entscheidest du selbst.</p>
       <div class="ob-cta">
         <button class="btn btn-primary btn-block" id="obStart">Kapitel 2 starten <svg class="i arrow"><use href="#i-arrow"/></svg></button>
         <button class="btn btn-silver btn-block" id="obLook">Erst umsehen</button>
@@ -3845,8 +3846,12 @@ window.BKBC = (function(){
     $("obLook").addEventListener("click", function(){ finishOb(false); });
     /* Mini-Frage: 1:1 die leichte Frage l1 aus der Kapitel-3-Fragenbank */
     try {
-      var bank=JSON.parse($("qbank-3").textContent);
-      var q=null; bank.questions.forEach(function(x){ if(x.id==="l1") q=x; });
+      var bank=JSON.parse($("qbank-2").textContent);
+      /* Erst die leichte l1, sonst die erste Single-Choice-Frage der Bank -
+         und der Fragetext kommt aus derselben Frage wie die Optionen. */
+      var q=null; bank.questions.forEach(function(x){ if(x.id==="l1" && x.options) q=x; });
+      if(!q) bank.questions.forEach(function(x){ if(!q && x.options) q=x; });
+      if(q && $("obQStem")) $("obQStem").innerHTML=q.stem;
       if(q){
         var wrap=$("obQOpts"), html="";
         q.options.forEach(function(o,oi){ html+="<button type='button' class='qopt' style='width:100%' data-oi='"+oi+"'><span>"+o+"</span></button>"; });
